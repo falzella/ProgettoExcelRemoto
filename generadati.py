@@ -11,9 +11,26 @@ class_info_row = df[df.apply(lambda row: row.astype(str).str.contains('CLASSE:')
 
 class_info = class_info_row.values[5]
 
-# Estrai la classe utilizzando un'espressione regolare
-classe_match = re.search(r'CLASSE:\s+([\w\s]+)\s+', class_info)
-classe = classe_match.group(1).strip() if classe_match else None
+
+# Trova indice della classe
+
+index_class = 0
+while index_class < len(class_info_row):
+    if class_info_row.values[index_class] == 'CLASSE:':
+        break
+    index_class += 1
+
+#trovo valore classe
+i = index_class + 1
+while i < len(class_info_row):
+    if pd.notna(class_info_row.values[i]):
+        class_info = class_info_row.values[i]
+        break
+    i += 1
+
+
+
+classe = class_info
 
 # Trova l'indice della riga contenente la tabella degli studenti
 start_index = df[df.apply(lambda row: row.astype(str).str.contains('Alunno').any(), axis=1)].index[0]
